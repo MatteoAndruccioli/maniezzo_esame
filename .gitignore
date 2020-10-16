@@ -1,0 +1,65 @@
+  
+.DS_Store
+node_modules
+/dist
+
+# local env files
+#.env.local
+#.env.*.local
+
+/backend/public/uploads/
+
+# Log files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Editor directories and files
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+build/
+dist/
+bin/
+spyder.egg-info/
+Thumbs.db
+desktop.ini
+.DS_Store/
+spyder_crash.log
+.DS_Store
+.spyproject
+.idea/
+.cache
+.coverage*
+MANIFEST
+
+# git .orig files
+*.orig
+
+# log files
+*.log
+
+# Rope project folders
+.ropeproject/
+.vscode/
+result.xml
+
+# Pylint dirs/files
+.pylint.d/
+
+# Compiled python files
+*.py[oc]
+
+# gedit files
+*~
+
+# Notepad++ files
+nppBackup/
+
+# Pytest dirs/files
+.pytest_cache/
