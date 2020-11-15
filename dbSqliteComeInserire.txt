@@ -1,0 +1,24 @@
+dotnet-aspnet-codegenerator controller -name ElencoIndiciController -async -api -m Stagione -dc ElencoIndiciContext -outDir Controllers
+
+dotnet-aspnet-codegenerator controller -name StagioneController -async -api -m Stagione -dc StagioneContext -outDir Controllers
+
+CREATE TABLE "indici" (
+id INTEGER PRIMARY KEY AUTOINCREMENT,
+"Data" TEXT,
+"SP_500" DOUBLE,
+"FTSE_MIB_" DOUBLE,
+"GOLD_SPOT" DOUBLE,
+"MSCI_EM" DOUBLE,
+"MSCI_EURO" DOUBLE,
+"All_Bonds" DOUBLE,
+"US_Treasury" DOUBLE)
+
+
+PRAGMA table_info("indici"); 
+	->restituisce tipi dati in tabella "serie storica indici"
+	
+	
+insert into indici
+SELECT "PK_UID","Dates", "S&P_500_INDEX", "FTSE_MIB_INDEX", "GOLD_SPOT_$_OZ", "MSCI_EM", "MSCI_EURO", "All_Bonds_TR", "U.S._Treasury"
+FROM "serie storica indici"
+
