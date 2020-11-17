@@ -46,7 +46,7 @@ namespace progetto
           }
         }
         //metto in result una stringa contenente su ogni riga un valore della colonna nel db
-        result = string.Join("@", serie.ToArray()).Replace("@", System.Environment.NewLine);
+        result = string.Join("@", serie.ToArray());//.Replace("@", System.Environment.NewLine);
         //stampo a video n° valori trovati (il primo elemento della lista è il nome della colonna)
         Console.WriteLine("trovati: " + (serie.Count()-1));  
         //memorizzo i dati raccolti in un csv nella cartella risultati su desktop

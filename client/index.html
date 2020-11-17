@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Indici client</title>
+  <link rel="stylesheet" type="text/css" href="client.css" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="client.js"> </script>
+</head>
+
+<body onload="init()">
+  <h1>Indici client</h1>
+  <div class="textAreafather">
+    <div class="textAreaSibling">
+      <div>
+        <input type="button" value="Read all index" onclick="findAll();" />
+      </div>
+  
+      <div>
+        Column Id: <input type="number" id="colId" size="1" value=1>
+        <input type="button" value="Read column by id" onclick="findById();" />
+      </div>
+    </div>
+
+    <div>
+      <textarea id="txtarea" rows="15" cols="150"> </textarea>
+    </div>
+  </div>
+
+
+
+</body>
+</html>

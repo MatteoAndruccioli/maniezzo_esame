@@ -31,6 +31,15 @@ namespace progetto
             services.AddDbContext<StagioneContext>(
                 options => options.UseSqlite("Data Source=testDB.sqlite"));
             services.AddControllers();
+            
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy",
+                builder => builder.AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader());
+            });
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -40,9 +49,14 @@ namespace progetto
             {
                 app.UseDeveloperExceptionPage();
             }
-
+            
+            app.UseDefaultFiles(); // for client servicing
+            app.UseStaticFiles(); // for client servicing
+            app.UseCors("CorsPolicy"); // disable cors
+            app.UseHttpsRedirection();
+            
             app.UseRouting();
-
+            
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

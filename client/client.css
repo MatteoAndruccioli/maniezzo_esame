@@ -1,0 +1,30 @@
+h1 {
+  color: blue;
+  text-align: center;
+}
+
+.textAreafather {
+  display: flex;
+  flex-direction: row;
+}
+
+.textAreafather > div {
+  background-color: #f1f1f1;
+  margin: 10px;
+  padding: 20px;
+  font-size: 20px;
+}
+
+.textAreaSibling{
+  display: flex;
+  flex-direction: column;
+}
+
+.textAreaSibling > div {
+  background-color: #fff;
+  margin: 5px;
+  padding: 5px;
+  font-size: 20px;
+  border-color: #d1d1d1;
+  border-style: solid;
+}

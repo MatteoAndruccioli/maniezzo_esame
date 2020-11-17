@@ -26,7 +26,7 @@ namespace progetto.Controllers
     {
       //risultato di default, restituito in caso di errore
       string result = ("idSerie non valido!@specificare un idSerie valido, ovvero appartenente all'intervallo [0,8]@" +
-      "0=>id;@1=>Data;@2=>SP_500;@3=>FTSE_MIB_;@4=>GOLD_SPOT;@5=>MSCI_EM;@6=>MSCI_EURO;@7=>All_Bonds;@8=>US_Treasury").Replace("@", System.Environment.NewLine);
+      "0=>id;@1=>Data;@2=>SP_500;@3=>FTSE_MIB_;@4=>GOLD_SPOT;@5=>MSCI_EM;@6=>MSCI_EURO;@7=>All_Bonds;@8=>US_Treasury");//.Replace("@", System.Environment.NewLine);
       
       try //int.Parse(idSerie) tira errori in caso idSerie non sia un numero
       {
