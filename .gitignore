@@ -26,6 +26,7 @@ pnpm-debug.log*
 build/
 dist/
 bin/
+progetto/risultati/
 spyder.egg-info/
 Thumbs.db
 desktop.ini
