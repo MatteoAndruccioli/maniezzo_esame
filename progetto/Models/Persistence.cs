@@ -62,7 +62,8 @@ namespace progetto
     */
     public void StringListToCsv(List<string> myList, string folderName, string fileName){
         //genero il path per la cartella indicata 
-        string folderPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "/" + folderName;
+        //string folderPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "/" + folderName;
+        string folderPath = new DirectoryInfo(Environment.CurrentDirectory).FullName + "/" + folderName;
         //se la cartella non esiste la creo altrimenti non accade nulla
         System.IO.Directory.CreateDirectory(folderPath);
         //StreamWriter (string path, bool append)

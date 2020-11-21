@@ -40,6 +40,7 @@ namespace progetto.Controllers
         Console.WriteLine("!!! probabilmente idSerie non è un numero. idSerie= " + idSerie);
       }
       return result;
+      // guarda lezione giorno 20/11/2020
     } 
   }
 }
