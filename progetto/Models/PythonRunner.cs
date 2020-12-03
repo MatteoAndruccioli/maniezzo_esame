@@ -46,7 +46,7 @@ public class PythonRunner
          {
             // Separated FileName and Arguments
             FileName = "cmd.exe",
-            Arguments = $"/c c:/ProgramData/Anaconda3/condabin/conda.bat activate {Environment}&&python {strCommand}",
+            Arguments = $"/c C:/Users/Matteo/anaconda3/condabin/conda.bat activate {Environment}&&python {strCommand}",
             UseShellExecute = false, 
             CreateNoWindow = false,
             ErrorDialog = false,

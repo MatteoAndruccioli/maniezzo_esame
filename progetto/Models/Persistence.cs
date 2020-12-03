@@ -20,38 +20,31 @@ namespace progetto
       errorString è una stringa di errore che viene restituita in caso query
       non vada a buon fine
     */
-    public string GetColumnFromIndiciDB(int columnNumber, string errorString)
+    public string GetColumnFromIndiciDB(string selectedCol, string errorString)
     { 
-      //risultato di default che segnala un errore
-      string result = errorString;
-      //nomi delle colonne contenute nel db indici
-      string[] colNames = new string[]{"id", "Data", "SP_500", "FTSE_MIB_", "GOLD_SPOT", "MSCI_EM", "MSCI_EURO", "All_Bonds", "US_Treasury"};
+      string result = errorString;//risultato di default che segnala un errore
+      List<string> serie = new List<string>(); //lista che conterrà la serie di dati
+      serie.Add(selectedCol); //il primo elemento della lista sarà il nome della colonna
 
-      if(0<=columnNumber && columnNumber<=8)
-      {      
-        string selectedCol = colNames[columnNumber]; //determino il nome della colonna
-        List<string> serie = new List<string>(); //lista che conterrà la serie di dati
-        serie.Add(selectedCol); //il primo elemento della lista sarà il nome della colonna
-
-        using (var command = _context.Database.GetDbConnection().CreateCommand())
+      using (var command = _context.Database.GetDbConnection().CreateCommand())
+      {
+        command.CommandText = $"SELECT {selectedCol} From indici";
+        _context.Database.OpenConnection();
+        using (var reader = command.ExecuteReader())
         {
-          command.CommandText = $"SELECT {selectedCol} From indici";
-          _context.Database.OpenConnection();
-          using (var reader = command.ExecuteReader())
+          while(reader.Read())
           {
-            while(reader.Read())
-            {
-              serie.Add(reader[selectedCol].ToString());
-            }
+            serie.Add(reader[selectedCol].ToString());
           }
         }
-        //metto in result una stringa contenente su ogni riga un valore della colonna nel db
-        result = string.Join("@", serie.ToArray());//.Replace("@", System.Environment.NewLine);
-        //stampo a video n° valori trovati (il primo elemento della lista è il nome della colonna)
-        Console.WriteLine("trovati: " + (serie.Count()-1));  
-        //memorizzo i dati raccolti in un csv nella cartella risultati su desktop
-        StringListToCsv(serie, "risultati", selectedCol);
       }
+      //metto in result una stringa contenente su ogni riga un valore della colonna nel db
+      result = string.Join("@", serie.ToArray());//.Replace("@", System.Environment.NewLine);
+      //stampo a video n° valori trovati (il primo elemento della lista è il nome della colonna)
+      Console.WriteLine("trovati: " + (serie.Count()-1));  
+      //memorizzo i dati raccolti in un csv nella cartella risultati su desktop
+      StringListToCsv(serie, "risultati", selectedCol);
+      
       return result;
     }
 
