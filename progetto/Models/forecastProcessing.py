@@ -1,7 +1,7 @@
 import pandas as pd, numpy as np, os
-import matplotlib.pyplot as plt
-import pmdarima as pm # pip install pmdarima
-from statsmodels.tsa.stattools import acf
+import math
+
+import pandas as pd, numpy as np, os
 import math
 
 '''
@@ -90,60 +90,48 @@ def computeSquaredError(values, mediaMobile):
     return sqErrors
 
 
-"""
-    quà la funzione che deve essere chiamata
-"""
-
-def compute(forecastFileNames, totAmount, portfolio, nvalues):
-    # data è un dictionary (una sorta lista di coppie chiave-valore), ottenuto estraendo dati daforecastFileNames
-    # in chiave hai il mome del file e nel valore una lista contenente i valori presenti nel file csv
-    data = getDataFromCsv(forecastFileNames)
-    # dictionary che ha in chiave il nome del file csv e in valore i dati calcolati come
-    # differenza dei valori letti dal csv
-    indexedDataDiff = computeIndexedDataDiff(data)
-    # dictionary (nome file csv, lista contenente tutti i valori assunti dall'investimento sullo specifico indice day-by-day)
-    dailyBasedIndexedPortfolioValues = computeDailyIndexedValues(indexedDataDiff, portfolio, totAmount)
-    # lista contenente il valore complessivo dell'investimento day by day
-    dailyBasedPortfolioValues = computePortfolioValues(dailyBasedIndexedPortfolioValues)
-    # lista contenente la variazione del valore del portafoglio di investimenti
-    portfolioDiff = computePortfolioDiff(dailyBasedPortfolioValues)
-    # media mobile calcolata sui valori day by day assunti dal portafoglio di investimento
-    movingAverage = computeMovingAverage(dailyBasedPortfolioValues,nvalues)
-    # (colonna AC excel) lista cotenente gli errori quadratici tra la media mobile e il valore effettivo del portafoglio in una certa data
-    # nota che è necessario rimuovere i primi nvalues-1 valori, sui quali è impossibile calcolare la media mobile 
-    squaredErrorList = computeSquaredError(dailyBasedPortfolioValues[(nvalues-1):], movingAverage)
-    # (cella AE4 excel) è l'ultima media mobile calcolata, sarà quella restituita come valore del portafoglio a fine investimento
-    returnMediaMobile =  movingAverage[len(movingAverage)-1]
-    # (cella AE5 excel) è il valore della deviazione standard che verrà restituito per valutare la bontà della previsione
-    stdev = math.sqrt(sum(squaredErrorList)/len(squaredErrorList))
-    print("returnMediaMobile: ", returnMediaMobile)
-    print("stdev: ", stdev)
-    return { "returnMediaMobile": returnMediaMobile, "stdev": stdev}
 
 
-'''
-    dati da usare per le prove:
-'''
-# questo array contiene i nomi dei file da cui dovranno essere estratti i dati
-# tali file conterranno solo i dati di forecast
-forecastFileNames = ["1_SP_500.csv", "2_FTSE_MIB_.csv", "3_GOLD_SPOT.csv", "4_MSCI_EM.csv", "5_MSCI_EURO.csv", "6_All_Bonds.csv", "7_US_Treasury.csv"]
-
-# ammontare dell'investimento iniziale == valore iniziale del portafogli
-totAmount = 100000
-
-# dictionary: chiave == nome di un file csv (associato ad un titolo), 
-# valore == percentuale di investimento sullo specifico titolo
-portfolio = {
-    "1_SP_500.csv" : 0.05, 
-    "2_FTSE_MIB_.csv" : 0.05, 
-    "3_GOLD_SPOT.csv" : 0.2, 
-    "4_MSCI_EM.csv" : 0.1, 
-    "5_MSCI_EURO.csv" : 0.05, 
-    "6_All_Bonds.csv" : 0.3, 
-    "7_US_Treasury.csv" : 0.25
-}
-
-# numero di giorni di cui si compone la finestra per la realizzazione della media mobile
-nvalues = 20
-
-risultato = compute(forecastFileNames, totAmount, portfolio, nvalues)
+''' per processare tutto istanzi un elemento di questa classe '''
+class ForecastsProcessor:
+    def __init__(self, _totAmount, _nvalues, data):
+        self.totAmount = _totAmount  # ammontare dell'investimento iniziale == valore iniziale del portafogli
+        self.nvalues = _nvalues  # numero di giorni di cui si compone la finestra per la realizzazione della media mobile
+        # dictionary che ha in chiave il nome del file csv e in valore i dati calcolati come
+        # differenza dei valori letti dal csv
+        self.indexedDataDiff = computeIndexedDataDiff(data) 
+        self.dailyBasedIndexedPortfolioValues = []
+        self.dailyBasedPortfolioValues = []
+        self.portfolioDiff = []
+        self.movingAverage = []
+        self.squaredErrorList = []
+        
+    def getIndexedDataDiff(self): return self.indexedDataDiff
+    def getDailyBasedIndexedPortfolioValues(self): return self.dailyBasedIndexedPortfolioValues
+    def dailyBasedPortfolioValues(self): return self.dailyBasedPortfolioValues
+    def getPortfolioDiff(self): return self.portfolioDiff
+    def getMovingAverage(self): return self.movingAverage
+    def getSquaredErrorList(self): return self.squaredErrorList
+         
+    #calcola valori di (returnMediaMobile, stdev) => li ritorna nella forma di un dictionary
+    def compute(self, portfolio):
+        # dictionary (nome file csv, lista contenente tutti i valori assunti dall'investimento sullo specifico indice day-by-day)
+        self.dailyBasedIndexedPortfolioValues = computeDailyIndexedValues(self.indexedDataDiff, portfolio, self.totAmount)
+        # lista contenente il valore complessivo dell'investimento day by day
+        self.dailyBasedPortfolioValues = computePortfolioValues(self.dailyBasedIndexedPortfolioValues)
+        # lista contenente la variazione del valore del portafoglio di investimenti
+        self.portfolioDiff = computePortfolioDiff(self.dailyBasedPortfolioValues)
+        # media mobile calcolata sui valori day by day assunti dal portafoglio di investimento
+        self.movingAverage = computeMovingAverage(self.dailyBasedPortfolioValues,self.nvalues)
+        # (colonna AC excel) lista cotenente gli errori quadratici tra la media mobile e il valore effettivo del portafoglio in una certa data
+        # nota che è necessario rimuovere i primi nvalues-1 valori, sui quali è impossibile calcolare la media mobile 
+        self.squaredErrorList = computeSquaredError(self.dailyBasedPortfolioValues[(self.nvalues-1):], self.movingAverage)
+        # (cella AE4 excel) è l'ultima media mobile calcolata, sarà quella restituita come valore del portafoglio a fine investimento
+        returnMediaMobile =  self.movingAverage[len(self.movingAverage)-1]
+        # (cella AE5 excel) è il valore della deviazione standard che verrà restituito per valutare la bontà della previsione
+        stdev = math.sqrt(sum(self.squaredErrorList)/len(self.squaredErrorList))
+        print("returnMediaMobile: ", returnMediaMobile)
+        print("stdev: ", stdev)
+        return { "returnMediaMobile": returnMediaMobile, "stdev": stdev}     
+    
+    
